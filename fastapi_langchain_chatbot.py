@@ -214,3 +214,12 @@ if __name__ == "__main__":
     print("Starting FastAPI server...")
     print("Access the API docs at http://127.0.0.1:8000/docs")
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+from fastapi.responses import HTMLResponse
+
+@app.get("/", response_class=HTMLResponse)
+async def get_home():
+    with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
+   

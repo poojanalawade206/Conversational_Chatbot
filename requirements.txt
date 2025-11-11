@@ -2,5 +2,27 @@ fastapi
 uvicorn[standard]
 langchain
 langchain-openai
-langchain-classic
 python-dotenv
+
+
+1. github account open kr.
+2. account vr gelyavr-create new repositary vr ja
+3. give name to that repositary
+4. choose -public/private-public open for everyone,private-only for you
+5. open your project folder on cmd
+
+# type all these commands on cmd
+6. type on cmd-git init
+7. git add (name of your files that you want to add on github)
+8. dont add venv and .env -so ignore these files with command
+   echo .venv/ > .gitignore
+   echo __pycache__/ >> .gitignore
+   echo .env >> .gitignore
+   git add .gitignore
+
+9. commit that file-git commit -m("msg that you want to add")
+10. git remote add origin (add link present on github)
+11. push all files-
+    git push -u origin main
+
+
