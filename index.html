@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversational AI Chatbot</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f2f3f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    #chat-box {
+      width: 420px;
+      height: 480px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #0078d7;
+      color: white;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #e0e0e0;
+    }
+
+    #input-container {
+      display: flex;
+      width: 420px;
+      margin-top: 12px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px 0 0 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #0078d7;
+      border: none;
+      color: white;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    footer {
+      margin-top: 15px;
+      color: #666;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💬 Conversational AI Chatbot</h1>
+
+  <div id="chat-box"></div>
+
+  <div id="input-container">
+    <input type="text" id="user-input" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <footer>Powered by FastAPI • LangChain • OpenAI</footer>
+
+  <script>
+    async function sendMessage() {
+      const inputField = document.getElementById("user-input");
+      const message = inputField.value.trim();
+      if (!message) return;
+
+      // Display user message
+      appendMessage("user", message);
+      inputField.value = "";
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input: message }),
+        });
+
+        const data = await response.json();
+        appendMessage("bot", data.response);
+      } catch (error) {
+        appendMessage("bot", "⚠️ Error connecting to the chatbot server.");
+        console.error("Error:", error);
+      }
+    }
+
+    function appendMessage(sender, text) {
+      const chatBox = document.getElementById("chat-box");
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", sender);
+      messageDiv.textContent = text;
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Allow pressing Enter to send
+    document
+      .getElementById("user-input")
+      .addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      });
+  </script>
+</body>
+</html>
